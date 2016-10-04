@@ -10,7 +10,7 @@ public class Note implements Comparable<Note>,java.io.Serializable {
 	private Date date;
 	private String title;
 	
-	public Note(String title){
+	public Note(String title){//comment
 		this.title = title;
 		date = new Date(System.currentTimeMillis());
 	}
