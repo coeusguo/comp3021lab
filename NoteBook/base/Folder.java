@@ -72,65 +72,90 @@ public class Folder implements java.io.Serializable {
 				tn = (TextNote)n;
 				int i = 0;
 				while(i < keys.length){
+					//ending case 1
 					if(i == keys.length - 1){
-						if(tn.getTitle().matches(".*"+keys[i]+".*")||tn.getContent().matches(".*"+keys[i]+".*")){
+						if(tn.getTitle().toLowerCase().contains(keys[i])||tn.getContent().toLowerCase().contains(keys[i]))
 							resultnotes.add(tn);
-						}
-						i++;
+						break;
 					}
+					//ending case 2:the last 3 element in keys array is 'key1' 'or' 'key2'
 					else if((i == keys.length-3 )&&( keys[i+1].equals("or"))){
-						if((tn.getTitle().matches(".*"+keys[i]+".*")||tn.getContent().matches(".*"+keys[i]+".*"))||(tn.getTitle().matches(".*"+keys[i+2]+".*")||tn.getContent().matches(".*"+keys[i+2]+".*")))
+						if((tn.getTitle().toLowerCase().contains(keys[i])||tn.getContent().toLowerCase().contains(keys[i]))||(tn.getTitle().toLowerCase().contains(keys[i+2])||tn.getContent().toLowerCase().contains(keys[i+2])))
 							resultnotes.add(tn);
-						i++;
+						break;
 					}
-					else if((keys[i+1].equals("or"))&&(i != keys.length-2)){
-						if(!((tn.getTitle().matches(".*"+keys[i]+".*")||tn.getContent().matches(".*"+keys[i]+".*"))||(tn.getTitle().matches(".*"+keys[i+2]+".*")||tn.getContent().matches(".*"+keys[i+2]+".*")))){
-							break;
+					//searching case 1: key[i] 'or' keys[i+2]
+					else if((keys[i+1].equals("or"))){
+						//neither of the two keys matched in the title or content
+						if(!((tn.getTitle().toLowerCase().contains(keys[i])||tn.getContent().toLowerCase().contains(keys[i]))||(tn.getTitle().toLowerCase().contains(keys[i+2])||tn.getContent().toLowerCase().contains(keys[i+2])))){
+							if(keys[i+3] == "or"&& i+3 < keys.length){
+								//keys:A or B or C ,now both A and B are wrong,move to C
+								//if C can be found matched,the whole search case is still satisfied
+								i += 4;
+								continue;
+							}
+							else
+								break;
 						}
 						else{
-							i = i + 3;
+							//at least one of the keys matched in the title or content
+							i += 3;
+							//special case A or B or C,now A or B is correct,A or B or C must me correct,and so does A or B or C or D....and so on
 							while(keys[i].equals("or")&&i<keys.length){
 								i += 2;
 							}
 						}
 					}
+					//ordinary searching case
 					else{
-						if(!(tn.getTitle().matches(".*"+keys[i]+".*")||tn.getContent().matches(".*"+keys[i]+".*"))){
+						if(!(tn.getTitle().toLowerCase().contains(keys[i])||tn.getContent().toLowerCase().contains(keys[i]))){
 							break;
 						}
 						i++;
 					}
 				}
 			}
+			//image note
 			else{
 				int i = 0;
 				while(i < keys.length){
+					//ending case 1
 					if(i == keys.length-1){
-						if(match(keys[i],n.getTitle())){
+						if(n.getTitle().toLowerCase().contains(keys[i])){
 							resultnotes.add(n);
 						}
-						i++;
+						break;
 					}
+					//ending case 2,the same as ending case 2 of text note
 					else if((i == keys.length - 3 )&&( keys[i+1].equals("or"))){
-						if(match(keys[i],n.getTitle().toLowerCase()) || match(keys[i+2],n.getTitle().toLowerCase())){
+						if(n.getTitle().toLowerCase().contains(keys[i]) || n.getTitle().toLowerCase().contains(keys[i+2])){
 							resultnotes.add(n);
 						}
-						i++;
+						break;
 					}
-					else if((keys[i+1].equals("or"))&&(i != keys.length-2)){
-						if(!(match(keys[i],n.getTitle().toLowerCase()) || match(keys[i+2],n.getTitle().toLowerCase())) ){
-							break;
+					//searching case 1
+					else if(keys[i+1].equals("or")){
+						if(!(n.getTitle().toLowerCase().contains(keys[i]) || n.getTitle().toLowerCase().contains(keys[i+2])) ){
+							if(keys[i+3] == "or"&& i+3 < keys.length){
+								//keys:A or B or C ,now both A and B are wrong,move to C
+								//if C can be found matched,the whole search case is still satisfied
+								i += 4;
+								continue;
+							}
+							else
+								break;
 						}
 						else{
-							
-							i = i + 3;
+							//the same as text note case
+							i += 3;
 							while(keys[i].equals("or")&&i<keys.length){
-								i = i + 2;
+								i += 2;
 							}
 						}
 					}
+					//ordinary searching case 
 					else{
-						if(!(match(keys[i],n.getTitle() ))){
+						if(!(n.getTitle().toLowerCase().contains(keys[i]))){
 							break;
 						}
 						else{
@@ -143,10 +168,5 @@ public class Folder implements java.io.Serializable {
 		return resultnotes;
 	}
 	
-	private boolean match(String key,String a){
-		if(a.matches(".*"+key+".*")||a.matches(".*"+key)||a.matches(key+".*")){
-			return true;
-		}
-		return false;
-	}
+
 }
