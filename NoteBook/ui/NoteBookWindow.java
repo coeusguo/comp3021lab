@@ -125,7 +125,7 @@ public class NoteBookWindow extends Application {
 			public void handle(ActionEvent e){
 				matchedNotes = null;
 				searchField.setText("");
-				
+				currentSearch = "";
 				updateListView();
 			}
 		});
@@ -198,12 +198,14 @@ public class NoteBookWindow extends Application {
 
 	private void updateListView() {
 		ArrayList<String> list = new ArrayList<String>();
-		textAreaNote.setText("");
-		for(Folder f : noteBook.getFolders()){
-			if(f.getName().equals(currentFolder)){
-				matchedNotes = f.searchNotes(currentSearch);
-				break;
-			}	
+		if(!currentSearch.equals("")){
+			textAreaNote.setText("");
+			for(Folder f : noteBook.getFolders()){
+				if(f.getName().equals(currentFolder)){
+					matchedNotes = f.searchNotes(currentSearch);
+					break;
+				}	
+			}
 		}
 		// TODO populate the list object with all the TextNote titles of the
 		// currentFolder
