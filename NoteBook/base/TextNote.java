@@ -53,6 +53,10 @@ public class TextNote extends Note implements java.io.Serializable{
 		return content;
 	}
 	
+	public void setContent(String newContent){
+		this.content = new String(newContent);
+	}
+	
 	public void exportTextToFile(String pathFolder) {
 		File file = null;
 		PrintWriter pw = null;

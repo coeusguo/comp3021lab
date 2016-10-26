@@ -168,5 +168,15 @@ public class Folder implements java.io.Serializable {
 		return resultnotes;
 	}
 	
+	public boolean removeNotes(String title) { 
+		for(Note n : notes){
+			if(n.getTitle().equals(title)){
+				notes.remove(n);
+				return true;
+			}
+		}
+		return false;
+	} 
+	
 
 }
