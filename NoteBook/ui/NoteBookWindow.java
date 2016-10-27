@@ -1,6 +1,7 @@
 package ui;
 
 import java.io.File;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -24,7 +25,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
-import javafx.scene.control.Tab;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputDialog;
@@ -208,7 +208,7 @@ public class NoteBookWindow extends Application {
 
 		foldersComboBox.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Object>() {
 			@Override
-			public void changed(ObservableValue ov, Object t, Object t1) {
+			public void changed(ObservableValue<?> ov, Object t, Object t1) {
 				currentFolder = t1.toString();
 				// this contains the name of the folder selected
 				// TODO update listview
@@ -224,7 +224,7 @@ public class NoteBookWindow extends Application {
 
 		titleslistView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Object>() {
 			@Override
-			public void changed(ObservableValue ov, Object t, Object t1) {
+			public void changed(ObservableValue<?> ov, Object t, Object t1) {
 				if (t1 == null)
 					return;
 				String title = t1.toString();
